@@ -7,6 +7,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $telefone = $_POST['telefone'];
     $descricao = $_POST['descricao'];
     $tipo = $_POST['tipo'];
+    $url = $_POST['url'] ?? null; // Adicionada a variável url
 
     $imagem = '';
 
@@ -26,21 +27,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 
     try {
-        $stmt = $pdo->prepare("INSERT INTO servicos (tipo, nome, endereco, telefone, descricao, imagem)
-                              VALUES (?, ?, ?, ?, ?, ?)");
-        if ($stmt->execute([$tipo, $nome, $endereco, $telefone, $descricao, $imagem])) {
+        $stmt = $pdo->prepare("INSERT INTO servicos (tipo, nome, endereco, telefone, descricao, imagem, url)
+                              VALUES (?, ?, ?, ?, ?, ?, ?)");
+        if ($stmt->execute([$tipo, $nome, $endereco, $telefone, $descricao, $imagem, $url])) {
             $_SESSION['mensagem'] = 'Serviço adicionado com sucesso!';
             header('Location: index.php?tipo=' . $tipo);
             exit;
         }
-    } catch(PDOException $e) {
+    } catch (PDOException $e) {
         $erro = "Erro ao cadastrar: " . $e->getMessage();
     }
 }
 
 $tipo = $_GET['tipo'] ?? 'hotel';
 $tipos = [
-    'hotel' => 'Hotéis',
+    'hotel' => 'Hotel',
     'pousada' => 'Pousadas',
     'restaurante' => 'Restaurantes',
     'lanchonete' => 'Lanchonetes',
@@ -54,7 +55,7 @@ $tipos = [
 </div>
 
 <div class="content-body">
-    <?php if(isset($erro)): ?>
+    <?php if (isset($erro)): ?>
         <div class="alert alert-erro"><?php echo $erro; ?></div>
     <?php endif; ?>
 
@@ -72,6 +73,11 @@ $tipos = [
         <div class="form-group">
             <label>Telefone:</label>
             <input type="text" name="telefone" required class="form-control">
+        </div>
+
+        <div class="form-group">
+            <label>URL:</label>
+            <input type="url" name="url" class="form-control" placeholder="https://www.exemplo.com.br">
         </div>
 
         <div class="form-group">

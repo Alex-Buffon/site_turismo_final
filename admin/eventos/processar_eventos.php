@@ -4,12 +4,12 @@ session_start();
 
 header('Content-Type: application/json');
 
-if(!isset($_SESSION['admin_logado'])) {
+if (!isset($_SESSION['admin_logado'])) {
     echo json_encode(['sucesso' => false, 'mensagem' => 'Não autorizado']);
     exit;
 }
 
-if($_SERVER['REQUEST_METHOD'] == 'POST') {
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     try {
         // Captura dados do formulário
         $titulo = trim($_POST['titulo'] ?? '');
@@ -20,30 +20,30 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
         $url = trim($_POST['url'] ?? '');
 
         // Validação dos campos obrigatórios
-        if(empty($titulo) || empty($tipo) || empty($local) || empty($data_inicio)) {
+        if (empty($titulo) || empty($tipo) || empty($local) || empty($data_inicio)) {
             throw new Exception('Todos os campos obrigatórios devem ser preenchidos');
         }
 
         // Processamento da imagem
         $imagem = null;
-        if(isset($_FILES['imagem']) && $_FILES['imagem']['error'] == 0) {
+        if (isset($_FILES['imagem']) && $_FILES['imagem']['error'] == 0) {
             $ext = strtolower(pathinfo($_FILES['imagem']['name'], PATHINFO_EXTENSION));
             $imagem = uniqid() . '.' . $ext;
             $diretorio = '../uploads/eventos/';
 
             // Cria o diretório se não existir
-            if(!is_dir($diretorio)) {
+            if (!is_dir($diretorio)) {
                 mkdir($diretorio, 0777, true);
             }
 
             // Move o arquivo
-            if(!move_uploaded_file($_FILES['imagem']['tmp_name'], $diretorio . $imagem)) {
+            if (!move_uploaded_file($_FILES['imagem']['tmp_name'], $diretorio . $imagem)) {
                 throw new Exception('Erro ao salvar imagem');
             }
         }
 
         // Inserção ou atualização no banco
-        if(empty($_POST['id'])) {
+        if (empty($_POST['id'])) {
             // Novo evento
             $sql = "INSERT INTO eventos (titulo, tipo, local, data_inicio, status, url, imagem)
                    VALUES (?, ?, ?, ?, ?, ?, ?)";
@@ -51,13 +51,13 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
             $mensagem = 'Evento adicionado com sucesso!';
         } else {
             // Atualização de evento
-            if($imagem) {
+            if ($imagem) {
                 // Remove imagem antiga se existir
                 $stmt = $pdo->prepare("SELECT imagem FROM eventos WHERE id = ?");
                 $stmt->execute([$_POST['id']]);
                 $img_antiga = $stmt->fetchColumn();
 
-                if($img_antiga && file_exists("../uploads/eventos/{$img_antiga}")) {
+                if ($img_antiga && file_exists("../uploads/eventos/{$img_antiga}")) {
                     unlink("../uploads/eventos/{$img_antiga}");
                 }
 
@@ -76,7 +76,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
         $stmt = $pdo->prepare($sql);
         $sucesso = $stmt->execute($params);
 
-        if($sucesso) {
+        if ($sucesso) {
             echo json_encode([
                 'sucesso' => true,
                 'mensagem' => $mensagem,
@@ -85,8 +85,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
         } else {
             throw new Exception('Erro ao salvar o evento');
         }
-
-    } catch(Exception $e) {
+    } catch (Exception $e) {
         echo json_encode(['sucesso' => false, 'mensagem' => $e->getMessage()]);
     }
 }

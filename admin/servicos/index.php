@@ -21,16 +21,16 @@ $tipos = [
 <div class="content-body">
     <!-- Navegação entre tipos -->
     <div class="tipos-nav">
-        <?php foreach($tipos as $key => $nome): ?>
+        <?php foreach ($tipos as $key => $nome): ?>
             <a href="?tipo=<?php echo $key; ?>"
-               class="btn <?php echo $tipo === $key ? 'btn-primary' : 'btn-secondary'; ?>">
+                class="btn <?php echo $tipo === $key ? 'btn-primary' : 'btn-secondary'; ?>">
                 <?php echo $nome; ?>
             </a>
         <?php endforeach; ?>
     </div>
 
     <!-- Mensagem de feedback -->
-    <?php if(isset($_SESSION['mensagem'])): ?>
+    <?php if (isset($_SESSION['mensagem'])): ?>
         <div class="alert alert-success">
             <?php
             echo $_SESSION['mensagem'];
@@ -47,9 +47,9 @@ $tipos = [
         while ($servico = $stmt->fetch()):
         ?>
             <div class="servico-item">
-                <?php if($servico['imagem']): ?>
+                <?php if ($servico['imagem']): ?>
                     <img src="<?php echo BASE_URL; ?>/uploads/servicos/<?php echo $servico['imagem']; ?>"
-                         alt="<?php echo htmlspecialchars($servico['nome']); ?>">
+                        alt="<?php echo htmlspecialchars($servico['nome']); ?>">
                 <?php endif; ?>
 
                 <div class="servico-info">
@@ -60,8 +60,8 @@ $tipos = [
                     <div class="servico-acoes">
                         <a href="editar.php?id=<?php echo $servico['id']; ?>" class="btn btn-sm btn-info">Editar</a>
                         <a href="javascript:void(0)"
-                           onclick="excluirServico(<?php echo $servico['id']; ?>)"
-                           class="btn btn-sm btn-danger">Excluir</a>
+                            onclick="excluirServico(<?php echo $servico['id']; ?>)"
+                            class="btn btn-sm btn-danger">Excluir</a>
                     </div>
                 </div>
             </div>
@@ -70,11 +70,11 @@ $tipos = [
 </div>
 
 <script>
-function excluirServico(id) {
-    if(confirm('Deseja realmente excluir este serviço?')) {
-        window.location.href = `excluir.php?id=${id}`;
+    function excluirServico(id) {
+        if (confirm('Deseja realmente excluir este serviço?')) {
+            window.location.href = `excluir.php?id=${id}`;
+        }
     }
-}
 </script>
 
 <?php require_once '../includes/footer.php'; ?>

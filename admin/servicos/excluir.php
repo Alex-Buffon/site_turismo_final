@@ -2,12 +2,12 @@
 require_once '../includes/conexao.php';
 session_start();
 
-if(!isset($_SESSION['admin_logado'])) {
+if (!isset($_SESSION['admin_logado'])) {
     header('Location: ../login.php');
     exit;
 }
 
-if(!isset($_GET['id'])) {
+if (!isset($_GET['id'])) {
     header('Location: index.php');
     exit;
 }
@@ -20,11 +20,11 @@ try {
     $stmt->execute([$id]);
     $servico = $stmt->fetch();
 
-    if($servico) {
+    if ($servico) {
         // Excluir imagem se existir
-        if($servico['imagem']) {
+        if ($servico['imagem']) {
             $arquivo = "../uploads/servicos/" . $servico['imagem'];
-            if(file_exists($arquivo)) {
+            if (file_exists($arquivo)) {
                 unlink($arquivo);
             }
         }
@@ -37,6 +37,6 @@ try {
     }
 
     header('Location: index.php?tipo=' . $servico['tipo']);
-} catch(PDOException $e) {
+} catch (PDOException $e) {
     die("Erro ao excluir: " . $e->getMessage());
 }

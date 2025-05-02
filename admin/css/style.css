@@ -86,17 +86,103 @@ header {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
+/* Estilos do Dashboard */
 .dashboard-cards {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 25px;
+  padding: 20px;
+  max-width: 1400px;
+  margin: 0 auto;
 }
 
 .card {
   background: white;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  display: flex;
+  align-items: center;
+  transition: all 0.3s ease;
+  height: 140px;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+}
+
+.card-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 20px;
+  transition: all 0.3s ease;
+}
+
+/* Cores específicas para cada card */
+.card-contatos .card-icon {
+  background: #e3f2fd;
+  color: #1976d2;
+}
+
+.card-comentarios .card-icon {
+  background: #f3e5f5;
+  color: #7b1fa2;
+}
+
+.card-eventos .card-icon {
+  background: #e8f5e9;
+  color: #388e3c;
+}
+
+.card-servicos .card-icon {
+  background: #fff3e0;
+  color: #f57c00;
+}
+
+.card-icon i {
+  font-size: 28px;
+}
+
+.card-info {
+  flex: 1;
+}
+
+.card-info h3 {
+  margin: 0;
+  font-size: 16px;
+  color: #666;
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+
+.card-info p {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.card-apoiadores .card-icon {
+  background: #fce4ec;
+  color: #c2185b;
+}
+
+.total-count {
+  font-size: 28px;
+  font-weight: bold;
+  color: #2c3e50;
+}
+
+.badge {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 500;
 }
 
 .form-group {
@@ -210,221 +296,7 @@ header {
   background: white;
   padding: 20px;
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-/* Estilos da Galeria */
-.galeria-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 20px;
-  padding: 20px;
-}
-
-.galeria-item {
-  background: white;
-  border-radius: 8px;
-  overflow: hidden;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-.galeria-item img {
-  width: 100%;
-  height: 200px;
-  object-fit: cover;
-}
-
-.galeria-info {
-  padding: 15px;
-}
-
-.galeria-info h4 {
-  margin: 0 0 10px 0;
-}
-
-.galeria-acoes {
-  display: flex;
-  gap: 10px;
-  margin-top: 10px;
-}
-
-/* Estilos do Modal */
-.modal {
-  display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0,0,0,0.5);
-}
-
-.modal-content {
-  background: white;
-  width: 90%;
-  max-width: 500px;
-  margin: 50px auto;
-  padding: 20px;
-  border-radius: 8px;
-}
-
-
-/* Estilos dos Serviços */
-.tipos-nav {
-  margin-bottom: 20px;
-  display: flex;
-  gap: 10px;
-}
-
-.servicos-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 20px;
-}
-
-.servico-item {
-  background: white;
-  border-radius: 8px;
-  overflow: hidden;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-.servico-item img {
-  width: 100%;
-  height: 200px;
-  object-fit: cover;
-}
-
-.servico-info {
-  padding: 15px;
-}
-
-.servico-info h4 {
-  margin: 0 0 10px 0;
-}
-
-.servico-info .endereco {
-  color: #666;
-  font-size: 0.9em;
-  margin-bottom: 10px;
-}
-
-.servico-acoes {
-  display: flex;
-  gap: 10px;
-  margin-top: 15px;
-}
-
-/* Formulários */
-.form-padrao {
-  max-width: 800px;
-  margin: 0 auto;
-  background: white;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-.form-group {
-  margin-bottom: 15px;
-}
-
-.form-group label {
-  display: block;
-  margin-bottom: 5px;
-  font-weight: bold;
-}
-
-.form-control {
-  width: 100%;
-  padding: 8px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-}
-
-textarea.form-control {
-  resize: vertical;
-}
-
-
-/* Estilos para Contatos */
-.table {
-  width: 100%;
-  background: white;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  margin-bottom: 20px;
-}
-
-.table th,
-.table td {
-  padding: 12px;
-  text-align: left;
-  border-bottom: 1px solid #eee;
-}
-
-.table th {
-  background: #f8f9fa;
-  font-weight: bold;
-}
-
-.badge {
-  padding: 5px 10px;
-  border-radius: 4px;
-  font-size: 12px;
-}
-
-.badge-success {
-  background: #28a745;
-  color: white;
-}
-
-.badge-warning {
-  background: #ffc107;
-  color: #000;
-}
-
-/* Modal */
-.modal {
-  display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0,0,0,0.5);
-}
-
-.modal-content {
-  background: white;
-  width: 90%;
-  max-width: 500px;
-  margin: 50px auto;
-  padding: 20px;
-  border-radius: 8px;
-}
-
-
-/* Estilos para Comentários */
-.filtros {
-  background: white;
-  padding: 15px;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  margin-bottom: 20px;
-}
-
-.filtros select {
-  width: 200px;
-  padding: 8px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-}
-
-/* Estrelas de avaliação */
-td .star {
-  color: #ffc107;
-  font-size: 18px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 /* Badges de status */
@@ -465,7 +337,7 @@ td .star {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0,0,0,0.5);
+  background: rgba(0, 0, 0, 0.5);
   z-index: 1000;
 }
 
@@ -476,7 +348,7 @@ td .star {
   margin: 50px auto;
   padding: 20px;
   border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 #comentarioConteudo {
@@ -486,7 +358,6 @@ td .star {
   border-radius: 4px;
   white-space: pre-wrap;
 }
-
 
 /* Estilos do Dashboard */
 .dashboard-cards {
@@ -500,7 +371,7 @@ td .star {
   background: white;
   padding: 20px;
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   display: flex;
   align-items: center;
 }
@@ -537,7 +408,7 @@ td .star {
   background: white;
   padding: 20px;
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .recent-section h2 {
@@ -600,22 +471,22 @@ td .star {
 
 /* Cores para tipos de eventos */
 .tipo-gastronomico {
-  background: #FF6B6B;
+  background: #ff6b6b;
   color: white;
 }
 
 .tipo-esportivo {
-  background: #4ECDC4;
+  background: #4ecdc4;
   color: white;
 }
 
 .tipo-religioso {
-  background: #A78BFA;
+  background: #a78bfa;
   color: white;
 }
 
 .tipo-festivo {
-  background: #FFB900;
+  background: #ffb900;
   color: white;
 }
 
@@ -648,14 +519,13 @@ td .star {
   font-size: 14px;
 }
 
-
 /*imagens no painel admin*/
 .evento-imagem-thumb {
   width: 100px; /* Aumentado de 50px para 100px */
   height: 100px; /* Adicionado altura fixa */
   border-radius: 4px;
   object-fit: cover; /* Mantém proporção da imagem */
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   transition: transform 0.2s;
   cursor: pointer;
 }
@@ -687,7 +557,7 @@ td .star {
   max-width: 300px; /* Aumentado de 200px para 300px */
   max-height: 300px;
   border-radius: 4px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   object-fit: contain;
 }
 
@@ -708,4 +578,213 @@ td .star {
 .table td:first-child {
   width: 120px; /* Largura fixa para coluna de imagem */
   text-align: center;
+}
+
+/* Estilos do Conteúdo */
+.content-header {
+  margin-bottom: 20px;
+}
+
+.content-header h2 {
+  color: #2c3e50;
+  font-size: 1.5rem;
+  margin: 0;
+}
+
+.content-body {
+  background: white;
+  padding: 25px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Classes do Formulário */
+.mb-3 {
+  margin-bottom: 1rem;
+}
+
+.form-label {
+  display: block;
+  margin-bottom: 8px;
+  color: #2c3e50;
+  font-weight: 500;
+}
+
+.form-control {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+  transition: border-color 0.2s;
+}
+
+.form-control:focus {
+  border-color: #2c3e50;
+  outline: none;
+}
+
+.form-select {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+  background-color: white;
+}
+
+.text-muted {
+  color: #6c757d;
+  font-size: 0.875rem;
+  margin-top: 5px;
+  display: block;
+}
+
+.alert {
+  padding: 12px 20px;
+  margin-bottom: 20px;
+  border-radius: 4px;
+}
+
+.alert-danger {
+  background-color: #f8d7da;
+  border: 1px solid #f5c6cb;
+  color: #721c24;
+}
+
+.btn {
+  padding: 8px 16px;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s;
+}
+
+.btn-primary {
+  background: #2c3e50;
+  color: white;
+}
+
+.btn-primary:hover {
+  background: #34495e;
+}
+
+.btn-secondary {
+  background: #6c757d;
+  color: white;
+}
+
+.btn-secondary:hover {
+  background: #5a6268;
+}
+
+.servico-item img {
+  width: 100px; /* Mesmo tamanho usado em outras áreas */
+  height: 100px;
+  object-fit: cover;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s;
+  cursor: pointer;
+}
+
+.servico-item img:hover {
+  transform: scale(1.1);
+}
+
+/* Estilos para Galeria Admin */
+.galeria-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 20px;
+  padding: 20px;
+}
+
+.galeria-item {
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+  position: relative;
+}
+
+.galeria-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.galeria-item img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  display: block;
+}
+
+.galeria-info {
+  padding: 15px;
+  background: white;
+}
+
+.galeria-info h3 {
+  margin: 0 0 10px 0;
+  font-size: 16px;
+  color: #2c3e50;
+}
+
+.galeria-info p {
+  margin: 0;
+  font-size: 14px;
+  color: #666;
+  line-height: 1.4;
+}
+
+.galeria-acoes {
+  display: flex;
+  gap: 10px;
+  padding: 10px 15px;
+  background: #f8f9fa;
+  border-top: 1px solid #eee;
+}
+
+.galeria-acoes .btn {
+  flex: 1;
+  padding: 8px;
+  font-size: 13px;
+  text-align: center;
+}
+
+/* Modal de Edição/Adição */
+.galeria-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+}
+
+.galeria-modal .modal-content {
+  background: white;
+  width: 90%;
+  max-width: 500px;
+  margin: 50px auto;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.preview-imagem {
+  margin: 15px 0;
+  text-align: center;
+}
+
+.preview-imagem img {
+  max-width: 100%;
+  max-height: 300px;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }

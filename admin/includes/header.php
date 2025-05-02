@@ -2,19 +2,21 @@
 session_start();
 require_once __DIR__ . '/conexao.php';
 
-if(!isset($_SESSION['admin_logado'])) {
+if (!isset($_SESSION['admin_logado'])) {
     header('Location: ' . BASE_URL . '/login.php');
     exit;
 }
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Painel Administrativo</title>
     <link rel="stylesheet" href="<?php echo BASE_URL; ?>/css/style.css">
 </head>
+
 <body>
     <div class="wrapper">
         <nav class="sidebar">
@@ -31,7 +33,10 @@ if(!isset($_SESSION['admin_logado'])) {
                     <a href="#">Galerias</a>
                     <ul class="submenu">
                         <li><a href="<?php echo BASE_URL; ?>/galerias/home.php">Galeria Home</a></li>
-                        <li><a href="<?php echo BASE_URL; ?>/galerias/servicos.php">Galeria Serviços</a></li>
+                        <!-- Atualize esta linha -->
+                        <li><a href="<?php echo BASE_URL; ?>/galerias/admin_servicos.php">
+                                <i class="fas fa-concierge-bell"></i> Galeria Serviços
+                            </a></li>
                     </ul>
                 </li>
                 <li><a href="<?php echo BASE_URL; ?>/servicos">Serviços</a></li>

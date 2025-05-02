@@ -1,0 +1,153 @@
+/* Container principal */
+.main-layout {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+}
+
+/* Apoiadores Laterais - Desktop */
+.apoiadores-left,
+.apoiadores-right {
+  position: fixed;
+  top: 43%;
+  transform: translateY(-50%);
+  width: 160px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 100;
+}
+
+.apoiadores-left {
+  left: 10px;
+}
+
+.apoiadores-right {
+  right: 10px;
+}
+
+/* Grid de apoiadores */
+.apoiadores-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 100%;
+}
+
+/* Card do Apoiador */
+.apoiador-card {
+  width: 150px; /* Aumentado de 100px para 150px */
+  height: 150px; /* Aumentado de 100px para 150px */
+  border-radius: 40px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s ease;
+  margin: 0; /* Adicionado margin mínima */
+}
+
+.apoiador-card:hover {
+  transform: scale(1.1);
+}
+
+.apoiador-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 4px;
+}
+
+/* Conteúdo Principal */
+.main-content {
+  margin: 0 100px;
+  padding: 20px;
+  min-height: 100vh;
+  overflow-y: auto;
+}
+
+/* Responsivo - Mobile */
+@media (max-width: 768px) {
+  /* Oculta apoiadores laterais */
+  .apoiadores-left,
+  .apoiadores-right {
+    display: none;
+  }
+
+  /* Container mobile */
+  .mobile-apoiadores {
+    display: block;
+    padding: 20px;
+    margin: 20px 15px;
+  }
+
+  /* Título da seção mobile */
+  .mobile-apoiadores .section-title {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  .mobile-apoiadores .section-title h2 {
+    font-size: 1.5rem;
+    color: #2c3e50;
+    margin-bottom: 5px;
+  }
+
+  .mobile-apoiadores .section-title p {
+    color: #666;
+    font-size: 0.9rem;
+  }
+
+  /* Grid de apoiadores mobile */
+  .mobile-apoiadores .apoiadores-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    margin-top: 15px;
+    padding: 0 10px;
+  }
+
+  /* Cards no mobile */
+  .apoiador-card {
+    width: 100%;
+    height: 100px;
+    margin: 0 auto;
+    max-width: 150px;
+  }
+
+  /* Ajuste do conteúdo no mobile */
+  .main-content {
+    margin: 0;
+    padding: 15px;
+  }
+}
+
+/* Desktop */
+@media (min-width: 769px) {
+  /* Oculta versão mobile */
+  .mobile-apoiadores {
+    display: none;
+  }
+
+  /* Containers laterais */
+  .apoiadores-left,
+  .apoiadores-right {
+    display: flex;
+    padding: 20px 15px;
+  }
+
+  /* Grid de apoiadores desktop */
+  .apoiadores-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    width: 100%;
+  }
+
+  /* Cards no desktop */
+  .apoiador-card {
+    width: 150px;
+    height: 150px;
+    margin: 10px auto;
+  }
+}

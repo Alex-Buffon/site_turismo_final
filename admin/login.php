@@ -6,7 +6,7 @@ require_once 'includes/conexao.php';
 // $senha = 'admin123';
 // echo password_hash($senha, PASSWORD_DEFAULT);
 
-if(isset($_POST['login'])) {
+if (isset($_POST['login'])) {
     $usuario = $_POST['usuario'];
     $senha = $_POST['senha'];
 
@@ -14,7 +14,7 @@ if(isset($_POST['login'])) {
     $admin_user = 'admin';
     $admin_pass = 'admin123';
 
-    if($usuario === $admin_user && $senha === $admin_pass) {
+    if ($usuario === $admin_user && $senha === $admin_pass) {
         $_SESSION['admin_logado'] = true;
         $_SESSION['admin_id'] = 1;
         header('Location: index.php');
@@ -27,17 +27,19 @@ if(isset($_POST['login'])) {
 
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Painel Administrativo</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
+
 <body class="login-page">
     <div class="login-container">
         <h2>Login Administrativo</h2>
 
-        <?php if(isset($erro)): ?>
+        <?php if (isset($erro)): ?>
             <div class="alert alert-erro"><?php echo $erro; ?></div>
         <?php endif; ?>
 
@@ -56,4 +58,5 @@ if(isset($_POST['login'])) {
         </form>
     </div>
 </body>
+
 </html>
