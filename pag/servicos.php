@@ -1,6 +1,20 @@
 <?php
 require_once '../admin/includes/conexao.php';
 
+// Inclui o contador com verificação
+$totalVisitas = 0;
+if (file_exists('../admin/includes/contador.php')) {
+  require_once '../admin/includes/contador.php';
+
+  // Coleta informações da visita
+  $ip = $_SERVER['REMOTE_ADDR'];
+  $dispositivo = $_SERVER['HTTP_USER_AGENT'] ?? 'Desconhecido';
+  $origem = $_SERVER['HTTP_REFERER'] ?? 'Acesso direto';
+
+  // Atualiza o contador para a página serviços
+  $totalVisitas = atualizarContador($pdo, 'servicos');
+}
+
 // Verificar conexão
 try {
   if (!$pdo || !($pdo instanceof PDO)) {
@@ -45,19 +59,53 @@ try {
 }
 
 // Consultas para apoiadores
-$stmtApoiadoresEsq = $pdo->query("SELECT imagem, site FROM apoiadores WHERE posicao = 'esquerda' ORDER BY ordem ASC");
+$stmtApoiadoresEsq = $pdo->query("SELECT id, imagem, site FROM apoiadores WHERE posicao = 'esquerda' ORDER BY ordem ASC");
 $apoiadoresEsquerda = $stmtApoiadoresEsq->fetchAll(PDO::FETCH_ASSOC);
 
-$stmtApoiadoresDir = $pdo->query("SELECT imagem, site FROM apoiadores WHERE posicao = 'direita' ORDER BY ordem ASC");
+$stmtApoiadoresDir = $pdo->query("SELECT id, imagem, site FROM apoiadores WHERE posicao = 'direita' ORDER BY ordem ASC");
 $apoiadoresDireita = $stmtApoiadoresDir->fetchAll(PDO::FETCH_ASSOC);
 
 // Buscar serviços da galeria
 try {
-  $stmtServicos = $pdo->prepare("SELECT * FROM galerias WHERE tipo = 'servicos' ORDER BY ordem ASC");
+  $stmtServicos = $pdo->prepare("
+        SELECT
+            id,
+            imagem,
+            titulo,
+            descricao,
+            url,
+            ordem
+        FROM galerias
+        WHERE tipo = 'servicos'
+        ORDER BY ordem ASC
+    ");
   $stmtServicos->execute();
   $galeria_servicos = $stmtServicos->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
   $galeria_servicos = [];
+  error_log("Erro ao buscar serviços: " . $e->getMessage());
+}
+
+// Buscar serviços por categoria com campos específicos
+try {
+  foreach ($categorias as $tipo => $nome) {
+    $stmt = $pdo->prepare("
+            SELECT
+                id,
+                nome,
+                imagem,
+                endereco,
+                telefone,
+                descricao,
+                url
+            FROM servicos
+            WHERE tipo = ?
+            ORDER BY nome ASC
+        ");
+    $stmt->execute([$tipo]);
+    $servicos[$tipo] = $stmt->fetchAll(PDO::FETCH_ASSOC);
+  }
+} catch (PDOException $e) {
   error_log("Erro ao buscar serviços: " . $e->getMessage());
 }
 ?>
@@ -184,7 +232,7 @@ try {
           <div class="servicos-grid" id="<?php echo $tipo; ?>-grid">
             <?php if (!empty($servicos[$tipo])): ?>
               <?php foreach ($servicos[$tipo] as $servico): ?>
-                <div class="servico-card" <?php echo !empty($servico['url']) ? 'data-url="' . htmlspecialchars($servico['url']) . '"' : ''; ?>>
+                <div class="servico-card" <?php echo !empty($servico['url']) ? 'onclick="window.open(\'redirecionar.php?tipo=servico&id=' . $servico['id'] . '\', \'_blank\')"' : ''; ?>>
                   <?php if ($servico['imagem']): ?>
                     <div class="servico-imagem">
                       <img src="../admin/uploads/servicos/<?php echo htmlspecialchars($servico['imagem']); ?>"
@@ -223,40 +271,48 @@ try {
 
 
     <section class="galeria-section section-spacing" id="galeria">
-      <div class="galeria-container">
-        <div class="section-title">
-          <h2><i class="fas fa-concierge-bell"></i> Empreendimentos em Destaque</h2>
-          <p>Conheça tudo o que oferecemos para sua melhor experiência</p>
-        </div>
-        <div class="galeria-grid">
-          <?php if (!empty($galeria_servicos)): ?>
-            <?php foreach ($galeria_servicos as $servico): ?>
-              <div class="galeria-item" <?php echo !empty($servico['url']) ? 'data-url="' . htmlspecialchars($servico['url']) . '"' : ''; ?>>
-                <div class="galeria-imagem">
-                  <img src="../admin/uploads/galerias/<?php echo htmlspecialchars($servico['imagem']); ?>"
-                    alt="<?php echo htmlspecialchars($servico['titulo']); ?>"
-                    loading="lazy">
-                  <?php if (!empty($servico['url'])): ?>
-                    <div class="link-indicator">
-                      <i class="fas fa-external-link-alt"></i>
-                    </div>
-                  <?php endif; ?>
-                </div>
-                <div class="galeria-info">
-                  <h3><?php echo htmlspecialchars($servico['titulo']); ?></h3>
-                  <?php if (!empty($servico['descricao'])): ?>
-                    <p><?php echo htmlspecialchars($servico['descricao']); ?></p>
-                  <?php endif; ?>
-                </div>
-              </div>
-            <?php endforeach; ?>
-          <?php else: ?>
-            <div class="no-content">
-              <p>Nenhum serviço cadastrado no momento.</p>
-            </div>
-          <?php endif; ?>
-        </div>
+       <div class="section-title">
+        <h2><i class="fas fa-images"></i> Galeria de Destaques</h2>
+        <p>Explore nossa galeria e descubra o que temos a oferecer</p>
       </div>
+    <div class="galeria-grid">
+  <?php if (!empty($galeria_servicos)): ?>
+    <?php foreach ($galeria_servicos as $servico): ?>
+      <?php if (!empty($servico['url'])): ?>
+        <a href="redirecionar.php?tipo=galeria-servicos&id=<?php echo $servico['id']; ?>"
+           target="_blank"
+           class="galeria-item">
+      <?php else: ?>
+        <div class="galeria-item">
+      <?php endif; ?>
+          <div class="galeria-imagem">
+            <img src="../admin/uploads/galerias/<?php echo htmlspecialchars($servico['imagem']); ?>"
+                alt="<?php echo htmlspecialchars($servico['titulo']); ?>"
+                loading="lazy">
+            <?php if (!empty($servico['url'])): ?>
+              <div class="link-indicator">
+                <i class="fas fa-external-link-alt"></i>
+              </div>
+            <?php endif; ?>
+          </div>
+          <div class="galeria-info">
+            <h3><?php echo htmlspecialchars($servico['titulo']); ?></h3>
+            <?php if (!empty($servico['descricao'])): ?>
+              <p><?php echo htmlspecialchars($servico['descricao']); ?></p>
+            <?php endif; ?>
+          </div>
+      <?php if (!empty($servico['url'])): ?>
+        </a>
+      <?php else: ?>
+        </div>
+      <?php endif; ?>
+    <?php endforeach; ?>
+  <?php else: ?>
+    <div class="no-content">
+      <p>Nenhum serviço cadastrado no momento.</p>
+    </div>
+  <?php endif; ?>
+</div>
     </section>
 
 
@@ -350,9 +406,9 @@ try {
         <h3>Informações de Contato</h3>
         <ul class="footer-contato">
           <li class="footer-item">
-            <a href="https://wa.me/5554981486589" target="_blank">
+            <a href="https://wa.me/5554981222284" target="_blank">
               <i class="fab fa-whatsapp"></i>
-              <span>(54) 98148-6589</span>
+              <span>(54) 98122-2284 (Carla)</span>
             </a>
           </li>
           <li class="footer-item">
@@ -362,9 +418,10 @@ try {
             </a>
           </li>
           <li class="footer-item">
-            <a href="https://maps.google.com" target="_blank">
+            <a href="https://www.google.com/maps/search/?api=1&query=<?php echo urlencode('R. Guerino Zugno, 17 - Samuara, Caxias do Sul - RS, 95180-000'); ?>"
+              target="_blank">
               <i class="fas fa-map-marker-alt"></i>
-              <span>Rua Exemplo, 123 - Cidade</span>
+              <span>R. Guerino Zugno, 1700 - Samuara, Caxias do Sul - RS</span>
             </a>
           </li>
         </ul>
@@ -372,18 +429,22 @@ try {
       <div class="footer-col">
         <h3>Conecte-se Conosco</h3>
         <div class="social-links">
-          <a href="#" target="_blank" title="Facebook"><i class="fab fa-facebook"></i></a>
-          <a href="#" target="_blank" title="Instagram"><i class="fab fa-instagram"></i></a>
+          <a href="https://www.facebook.com/share/16E44oNUUC/" target="_blank" title="Facebook"><i class="fab fa-facebook"></i></a>
+          <a href="https://www.instagram.com/caxiastemturismo?igsh=NTNnbWViZGdybm43" target="_blank" title="Instagram"><i class="fab fa-instagram"></i></a>
           <a href="#" target="_blank" title="TikTok"><i class="fab fa-tiktok"></i></a>
           <a href="#" target="_blank" title="YouTube"><i class="fab fa-youtube"></i></a>
         </div>
         <p class="social-desc">Siga nossas redes sociais e fique por dentro de todas as novidades</p>
       </div>
     </div>
+    <!-- Adicione dentro da div footer-bottom nas duas páginas -->
     <div class="footer-bottom">
       <p>&copy; <?php echo date('Y'); ?> Portal de Turismo. Todos os direitos reservados.</p>
+      <p class="contador-visitas">
+        <i class="fas fa-chart-line"></i>
+        Total de visitas: <?php echo number_format($totalVisitas, 0, ',', '.'); ?>
+      </p>
     </div>
-  </div>
 </footer>
 
 <!-- Scripts -->

@@ -18,14 +18,10 @@ try {
 }
 ?>
 
-<!-- Adicione estas dependências no head -->
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-
 <div class="content-wrapper">
     <div class="content-header">
         <h2><i class="fas fa-concierge-bell"></i> Galeria de Serviços</h2>
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#servicoModal">
+        <button type="button" class="btn btn-primary" onclick="abrirModalAdicionar()">
             <i class="fas fa-plus"></i> Adicionar Serviço
         </button>
     </div>
@@ -50,6 +46,13 @@ try {
                     <div class="galeria-info">
                         <h4><?php echo htmlspecialchars($servico['titulo']); ?></h4>
                         <p><?php echo htmlspecialchars($servico['descricao']); ?></p>
+                        <?php if (!empty($servico['url'])): ?>
+                            <p class="text-muted">
+                                <a href="<?php echo htmlspecialchars($servico['url']); ?>" target="_blank">
+                                    <i class="fas fa-link"></i> Ver link
+                                </a>
+                            </p>
+                        <?php endif; ?>
                         <div class="galeria-acoes">
                             <button class="btn btn-sm btn-info" onclick="editarServico(<?php echo $servico['id']; ?>)">
                                 <i class="fas fa-edit"></i> Editar
@@ -66,93 +69,129 @@ try {
 </div>
 
 <!-- Modal -->
-<div class="modal fade" id="servicoModal" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Gerenciar Serviço</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body">
-                <form id="formServico" enctype="multipart/form-data">
-                    <input type="hidden" id="id" name="id">
-                    <input type="hidden" name="tipo" value="servicos">
-                    <input type="hidden" name="acao" value="adicionar">
+<div class="modal" id="servicoModal">
+    <div class="modal-content">
+        <h3>Gerenciar Serviço</h3>
+        <form method="POST" enctype="multipart/form-data" id="formServico">
+            <input type="hidden" name="id" id="edit_id">
+            <input type="hidden" name="tipo" value="servicos">
+            <input type="hidden" name="acao" value="adicionar">
 
-                    <div class="form-group mb-3">
-                        <label>Título</label>
-                        <input type="text" class="form-control" id="titulo" name="titulo" required>
-                    </div>
-
-                    <div class="form-group mb-3">
-                        <label>Descrição</label>
-                        <textarea class="form-control" id="descricao" name="descricao" rows="3"></textarea>
-                    </div>
-
-                    <div class="form-group mb-3">
-                        <label>Imagem</label>
-                        <input type="file" class="form-control" id="imagem" name="imagem" accept="image/*">
-                        <div id="preview-container" class="mt-2" style="display:none">
-                            <img id="imagem_preview" src="" style="max-width:200px">
-                        </div>
-                    </div>
-                </form>
+            <div class="form-group">
+                <label>Título:</label>
+                <input type="text" name="titulo" id="edit_titulo" class="form-control" required>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-primary" onclick="salvarServico()">Salvar</button>
+
+            <div class="form-group">
+                <label>Descrição:</label>
+                <textarea name="descricao" id="edit_descricao" class="form-control" rows="3"></textarea>
             </div>
-        </div>
+
+            <div class="form-group">
+                <label>URL:</label>
+                <input type="url" name="url" id="edit_url" class="form-control" placeholder="https://">
+            </div>
+
+            <div class="form-group">
+                <label>Imagem:</label>
+                <input type="file" name="imagem" class="form-control" accept="image/*">
+                <div id="preview-container" class="mt-2" style="display:none">
+                    <img id="imagem_preview" src="" style="max-width:200px">
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Salvar</button>
+                <button type="button" class="btn btn-secondary" onclick="fecharModal()">Cancelar</button>
+            </div>
+        </form>
     </div>
 </div>
 
-<script>
-    function editarServico(id) {
-        document.querySelector('#formServico [name="acao"]').value = 'editar';
 
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Form adicionar/editar
+        const formServico = document.querySelector('#formServico');
+        if (formServico) {
+            formServico.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const formData = new FormData(this);
+
+                fetch('processar_galeria.php', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.sucesso) {
+                        alert(data.mensagem);
+                        location.reload();
+                    } else {
+                        alert(data.mensagem || 'Erro ao processar serviço');
+                    }
+                })
+                .catch(error => {
+                    console.error('Erro:', error);
+                    alert('Erro ao processar requisição');
+                });
+            });
+        }
+    });
+
+    function editarServico(id) {
         fetch(`processar_galeria.php?acao=buscar&id=${id}`)
             .then(response => response.json())
             .then(data => {
                 if (data.sucesso) {
-                    document.getElementById('id').value = data.imagem.id;
-                    document.getElementById('titulo').value = data.imagem.titulo;
-                    document.getElementById('descricao').value = data.imagem.descricao;
+                    document.getElementById('edit_id').value = data.imagem.id;
+                    document.getElementById('edit_titulo').value = data.imagem.titulo;
+                    document.getElementById('edit_descricao').value = data.imagem.descricao || '';
+                    document.getElementById('edit_url').value = data.imagem.url || '';
+
+                    const previewContainer = document.getElementById('preview-container');
+                    const imagemPreview = document.getElementById('imagem_preview');
+
                     if (data.imagem.imagem) {
-                        document.getElementById('preview-container').style.display = 'block';
-                        document.getElementById('imagem_preview').src = '../uploads/galerias/' + data.imagem.imagem;
+                        imagemPreview.src = '../uploads/galerias/' + data.imagem.imagem;
+                        previewContainer.style.display = 'block';
                     }
-                    const modal = new bootstrap.Modal(document.getElementById('servicoModal'));
-                    modal.show();
-                } else {
-                    alert(data.mensagem);
-                }
-            })
-            .catch(error => console.error('Erro:', error));
-    }
 
-    function salvarServico() {
-        const form = document.getElementById('formServico');
-        const formData = new FormData(form);
-
-        fetch('processar_galeria.php', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.sucesso) {
-                    const modal = bootstrap.Modal.getInstance(document.getElementById('servicoModal'));
-                    modal.hide();
-                    location.reload();
+                    document.getElementById('servicoModal').style.display = 'block';
                 } else {
-                    alert(data.mensagem);
+                    alert('Erro ao carregar serviço');
                 }
             })
             .catch(error => {
                 console.error('Erro:', error);
-                alert('Erro ao processar requisição');
+                alert('Erro ao carregar serviço');
             });
     }
+
+
+
+
+    // Adicione esta função no início do bloco script
+    function abrirModalAdicionar() {
+        const modal = document.getElementById('servicoModal');
+        const form = document.getElementById('formServico');
+
+        // Limpa o formulário
+        form.reset();
+
+        // Reseta os campos hidden
+        form.querySelector('[name="id"]').value = '';
+        form.querySelector('[name="acao"]').value = 'adicionar';
+
+        // Esconde o preview da imagem
+        document.getElementById('preview-container').style.display = 'none';
+
+        // Mostra o modal
+        modal.style.display = 'block';
+    }
+
+
+    
 
     function excluirServico(id) {
         if (confirm('Tem certeza que deseja excluir este serviço?')) {
@@ -162,7 +201,7 @@ try {
                     if (data.sucesso) {
                         location.reload();
                     } else {
-                        alert(data.mensagem);
+                        alert(data.mensagem || 'Erro ao excluir serviço');
                     }
                 })
                 .catch(error => {
@@ -172,24 +211,30 @@ try {
         }
     }
 
+    function fecharModal() {
+        document.getElementById('servicoModal').style.display = 'none';
+        document.getElementById('formServico').reset();
+        document.getElementById('preview-container').style.display = 'none';
+    }
+
     // Preview da imagem
-    document.getElementById('imagem').addEventListener('change', function(e) {
+    document.querySelector('input[type="file"]').addEventListener('change', function(e) {
+        const previewContainer = document.getElementById('preview-container');
+        const imagemPreview = document.getElementById('imagem_preview');
+
         if (e.target.files && e.target.files[0]) {
             const reader = new FileReader();
             reader.onload = function(e) {
-                document.getElementById('preview-container').style.display = 'block';
-                document.getElementById('imagem_preview').src = e.target.result;
+                imagemPreview.src = e.target.result;
+                previewContainer.style.display = 'block';
             }
             reader.readAsDataURL(e.target.files[0]);
+        } else {
+            previewContainer.style.display = 'none';
         }
-    });
-
-    // Limpa o formulário quando o modal é fechado
-    document.getElementById('servicoModal').addEventListener('hidden.bs.modal', function() {
-        document.getElementById('formServico').reset();
-        document.getElementById('preview-container').style.display = 'none';
-        document.querySelector('#formServico [name="acao"]').value = 'adicionar';
     });
 </script>
 
 <?php require_once __DIR__ . '/../includes/footer.php'; ?>
+
+

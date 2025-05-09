@@ -14,6 +14,28 @@ body {
   font-family: Arial, sans-serif;
 }
 
+/* Layout Principal */
+.content-center {
+  flex: 1;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Seção Galeria */
+.galeria-section {
+  border-radius: 15px;
+  padding: 2rem;
+  margin: 2rem 0;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.galeria-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
 /* Centralização dos títulos e parágrafos */
 .section-title {
   text-align: center;
@@ -307,4 +329,16 @@ body {
     font-size: 1.3rem;
     padding: 0.5rem 1rem;
   }
+}
+
+.contador-visitas {
+  font-size: 0.9em;
+  color: white;
+  margin-top: 10px;
+  text-align: center;
+}
+
+.contador-visitas i {
+  margin-right: 5px;
+  color: #ff6b6b;
 }
