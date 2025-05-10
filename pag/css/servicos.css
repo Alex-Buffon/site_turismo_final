@@ -69,8 +69,8 @@
 
 .servicos-grid {
   display: none;
-  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-  gap: 30px;
+  grid-template-columns: repeat(4, 1fr); /* Alterado para 4 colunas fixas */
+  gap: 20px; /* Reduzido o gap para melhor aproveitamento do espaço */
   padding: 20px;
 }
 
@@ -86,6 +86,10 @@
   box-shadow: 0 5px 25px rgba(0, 0, 0, 0.1);
   transition: all 0.4s ease;
   position: relative;
+  width: 100%;
+  aspect-ratio: 3/4; /* Proporção altura/largura */
+  display: flex;
+  flex-direction: column;
 }
 
 .servico-card:hover {
@@ -96,10 +100,11 @@
 .servico-header {
   position: relative;
   overflow: hidden;
+  flex: 1; /* Ocupa espaço disponível */
 }
 
 .servico-imagem {
-  height: 250px;
+  height: 100%; /* Ajustado para ocupar todo o header */
   position: relative;
 }
 
@@ -110,7 +115,6 @@
   left: 0;
   width: 100%;
   height: 50%;
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent);
 }
 
 .servico-imagem img {
@@ -124,48 +128,48 @@
   transform: scale(1.1);
 }
 
-.servico-header h3 {
-  position: absolute;
-  bottom: 20px;
-  left: 20px;
-  right: 20px;
-  color: #ffffff;
-  font-size: 1.5rem;
-  font-weight: 600;
-  margin: 0;
-  z-index: 1;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-}
-
+/* Informações da Imagem */
 .servico-info {
-  padding: 25px;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgb(0, 0, 0);
+  color: white;
+  padding: 5px; /* Reduzido de 15px */
 }
 
 .info-item {
   display: flex;
   align-items: flex-start;
-  gap: 15px;
-  margin-bottom: 15px;
-  padding-bottom: 15px;
-  border-bottom: 1px solid #e0e0e0;
+  gap: 8px; /* Reduzido de 10px */
+  margin-bottom: 0px; /* Reduzido de 10px */
+  padding-bottom: 0px; /* Reduzido de 10px */
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .info-item:last-child {
   border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
 }
 
 .info-item i {
-  color: #1a237e;
-  font-size: 1.2rem;
+  color: #ffffff;
+  font-size: 0.5rem; /* Reduzido de 1rem */
   flex-shrink: 0;
-  margin-top: 3px;
+  margin-top: 0; /* Reduzido de 2px */
 }
 
 .info-item p {
-  margin: 0;
-  color: #424242;
-  line-height: 1.6;
-  font-size: 1rem;
+  color: #ffffff;
+  line-height: 0.5; /* Reduzido de 1.4 */
+  font-size: 0.8rem; /* Reduzido de 0.9rem */
+}
+
+/* Ajuste do título dentro da imagem */
+.servico-header h3 {
+  font-size: 1rem; /* Reduzido de 1.2rem */
 }
 
 .whatsapp-btn {

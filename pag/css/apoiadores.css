@@ -9,7 +9,7 @@
 .apoiadores-left,
 .apoiadores-right {
   position: fixed;
-  top: 43%;
+  top: 48%;
   transform: translateY(-50%);
   width: 160px;
   display: flex;
@@ -23,28 +23,28 @@
 }
 
 .apoiadores-right {
-  right: 10px;
+  right: 90px;
 }
 
 /* Grid de apoiadores */
 .apoiadores-grid {
   display: flex;
   flex-direction: column;
-  gap: 4px;
   width: 100%;
 }
 
 /* Card do Apoiador */
 .apoiador-card {
-  width: 150px; /* Aumentado de 100px para 150px */
-  height: 150px; /* Aumentado de 100px para 150px */
+  width: 250px;
+  height: auto;
+  min-height: 150px;
   border-radius: 40px;
   overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
   transition: transform 0.3s ease;
-  margin: 0; /* Adicionado margin mínima */
+  margin: 0;
 }
 
 .apoiador-card:hover {
@@ -101,18 +101,19 @@
   /* Grid de apoiadores mobile */
   .mobile-apoiadores .apoiadores-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: 1fr;
     gap: 15px;
     margin-top: 15px;
     padding: 0 10px;
   }
 
-  /* Cards no mobile */
+ /* Cards no mobile */
   .apoiador-card {
     width: 100%;
-    height: 100px;
+    max-width: 250px;
+    height: auto;
+    min-height: 150px;
     margin: 0 auto;
-    max-width: 150px;
   }
 
   /* Ajuste do conteúdo no mobile */
@@ -144,10 +145,11 @@
     width: 100%;
   }
 
-  /* Cards no desktop */
+   /* Cards no desktop */
   .apoiador-card {
-    width: 150px;
-    height: 150px;
+    width: 250px;
+    height: auto;
+    min-height: 150px;
     margin: 10px auto;
   }
 }
